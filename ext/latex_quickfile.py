@@ -1,19 +1,20 @@
 
 import marko as m
+import os
 
 class File(m.inline.InlineElement):
     pattern = r'<\s+([^\r\n]+)\.([^\r\n\s.]+)( [^\n]+)?'
     def __init__(self, match):
         self.path = match.group(1) + '.' + match.group(2)
         self.type = match.group(2)
-        self.args = match.group(3).split(" ") if match.group(3) else []
+        self.args = [s for s in match.group(3).split(" ") if not s == ''] if match.group(3) else []
 
 class FileRenderMixin(object):
     def render_file(self, element):
         if element.type == 'tex':
             with open(element.path) as f:
                 return f.read()
-        elif element.type in ('png', 'jpg', 'jpeg'):
+        elif element.type in ('png', 'jpg', 'jpeg', 'pdf'):
             self._packages.add("graphicx")
             filename = os.path.basename(element.path[:-len(element.type)-1])
             i = 0
