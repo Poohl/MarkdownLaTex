@@ -1,6 +1,7 @@
 
 
 import marko as m
+from ext.math_common import texify_math
 
 class Math(m.inline.InlineElement):
     pattern = r'\$([^\$]+)\$'
@@ -10,7 +11,7 @@ class Math(m.inline.InlineElement):
 
 class MathRenderMixin(object):
     def render_math(self, element):
-        return f"${element.math}$"
+        return f"${texify_math(element.math)}$"
 
 class MathExtension:
     elements = [Math]
